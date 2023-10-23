@@ -1,0 +1,2 @@
+id | amount | category | description 
+id | amount | category | description 
