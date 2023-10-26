@@ -26,7 +26,29 @@ def clear_terminal():
         os.system('clear')
 
 
-def handle_command(expense_registry, user_input):
+def welcome_prompt(username):
+    if not username:
+        cprint("Welcome to your personal expense tracker!")
+
+        while not username:
+            cprint("Please enter your name: ", end='')
+            username = input().strip()
+        clear_terminal()
+        cprint(f"""Welcome {username.capitalize()}, to your personal expense tracker!\n""")
+        return username
+
+def command_list():
+
+    lprint(
+        'Please choose one of the following commands:\n',
+        '\tlog - to log a new expense\n',
+        '\tview - to view all expenses\n',
+        '\tdelete - to delete an expense\n',
+        '\tsummarize - to summarize your expenses\n',
+        '\tsearch - to search for a specific expense\n',
+        '\texit/quit - to exit the program\n'
+    )
+def handle_command(expense_registry, user_input,username):
     if user_input == 'log':
         clear_terminal()
         expense_registry.add_expense()
@@ -46,38 +68,19 @@ def handle_command(expense_registry, user_input):
             lprint("Sorry, there is no expense with that ID.")
 
     elif user_input == "summarize":
-        pass
+        expense_registry.summarize()
     elif user_input == "search":
         clear_terminal()
         if expense_registry.isempty():
             cprint("Sorry, there are no expenses that have been logged yet.")
         else:
             expense_registry.search()
-
-
-
+    elif (user_input == "exit") or (user_input == "quit"):
+        cprint(f"Goodbye {username.capitalize()}!")
+        exit()
     else:
         cprint("Invalid command. Please try again.")
 
 
-def welcome_prompt(username):
-    if not username:
-        cprint("Welcome to your personal expense tracker!")
 
-        while not username:
-            cprint("Please enter your name: ", end='')
-            username = input().strip()
-        clear_terminal()
-        cprint(f"""Welcome {username}, to your personal expense tracker!\n""")
 
-def command_list():
-
-    lprint(
-        'Please choose one of the following commands:\n',
-        '\tlog - to log a new expense\n',
-        '\tview - to view all expenses\n',
-        '\tdelete - to delete an expense\n',
-        '\tsummarize - to summarize your expenses\n',
-        '\tsearch - to search for a specific expense\n',
-        '\texit/quit - to exit the program\n'
-    )

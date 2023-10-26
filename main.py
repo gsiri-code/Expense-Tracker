@@ -6,16 +6,15 @@ username = None
 
 clear_terminal()
 
-welcome_prompt(username)
+username = welcome_prompt(username)
 
 while True:
     command_list()
     cprint("Please input one of the key words above:", end='')
     user_input = input().strip()
 
-    handle_command(expense_registry,user_input)
+    handle_command(expense_registry,user_input,username)
 
-    if (user_input == "exit") or (user_input == "quit"):
-        break
+
 
 
