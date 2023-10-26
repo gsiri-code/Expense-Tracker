@@ -17,7 +17,9 @@ class ExpenseRegistry:
             self.description = description
 
         def __repr__(self):
-            return f' Expense {self.exp_id}: {self.amount}| {self.category} | {self.description} \n'
+            table = Table('ID', 'Amount', 'Category', 'Description', 'Date')
+            table.add_row([self.exp_id, self.amount,self.category,self.description,self.date_time])
+            return str(table)
 
         def __eq__(self, other):
             return self.amount == other.amount and self.category == other.category and self.description == other.description
@@ -79,7 +81,7 @@ class ExpenseRegistry:
         new_expense = ExpenseRegistry.Expense(self.exp_id, amount, category, description)
         self.expenses[self.exp_id] = new_expense
 
-        self.display_single_expense(self.exp_id)
+        lprint(new_expense)
 
 
         # TODO: make the expense created be added to the expenses.txt file and output to terminal
@@ -90,13 +92,6 @@ class ExpenseRegistry:
             table.add_row(
                 [exp_id, expense.get_amount(), expense.get_category(), expense.get_description(), expense.date_time])
         return str(table)
-
-    def display_single_expense(self, exp_id):
-        table = Table('ID', 'Amount', 'Category', 'Description', 'Date')
-        table.add_row([self.expenses[exp_id].get_id(), self.expenses[exp_id].get_amount(),
-                       self.expenses[exp_id].get_category(), self.expenses[exp_id].get_description(),
-                       self.expenses[exp_id].date_time])
-        print(table)
 
     def delete_expense(self, ):
         cprint("Please enter the ID of the expense you would like to delete:", end='')
@@ -122,12 +117,12 @@ class ExpenseRegistry:
         else:
             cprint("Please enter a valid search type.")
 
-    def search_by_id(self, search_id):
+    def search_by_id(self):
         lprint("Please enter the id of the expense you would like to view: ", end='')
         search_id = int(input())
         while True:
             try:
-                self.display_single_expense(search_id)
+                lprint(self.expenses[search_id])
                 break
             except KeyError:
                 cprint("Please enter a valid id.")
@@ -155,15 +150,3 @@ class ExpenseRegistry:
         table.add_row([self.total_val, self.amount_of_exp,self.total_categories])
         lprint(table)
 
-# def find_description(self, description):
-# descriptions = {exp_id: expense.get_description() for exp_id, expense in self.expenses.items()}
-#
-# # Use fuzzywuzzy to find the best matches
-# best_matches = process.extract(description, descriptions, limit=10)  # Adjust limit as needed
-#
-# # Output the best matches
-# for match in best_matches:
-#     exp_id, score = match[0], match[1]
-#     if score > 80:  # Adjust score threshold as needed
-#         expense = self.expenses[exp_id]
-#         print(expense)  # Or do something else with the matching expenses
