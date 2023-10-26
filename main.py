@@ -15,10 +15,7 @@ while True:
 
     handle_command(expense_registry,user_input)
 
-    if user_input == "exit":
+    if (user_input == "exit") or (user_input == "quit"):
         break
 
 
-# expenses_file = open("expenses.txt", "a+")
-# expenses_file.write("id | amount | category | description \n")
-# expenses_file.close()

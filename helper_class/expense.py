@@ -1,7 +1,7 @@
 import datetime
-
-from helper_function.command_handler import cprint
+from helper_function.command_handler import cprint, lprint
 from utilities.Table import Table
+# from fuzzywuzzy import process
 
 class ExpenseRegistry:
 
@@ -45,12 +45,16 @@ class ExpenseRegistry:
     def add_expense(self):
         amount = category = description = None
         while not (amount and category and description):
-            cprint("Please enter the amount:", end="")
-            amount = input().strip()
-            cprint("Please enter the category (ex. food , transportation..):", end="")
-            category = input().strip()
-            cprint("Please enter the description:", end="")
-            description = input().strip()
+            try:
+                cprint("Please enter the amount:", end="")
+                amount = float(input())
+                cprint("Please enter the category (ex. food , transportation..):", end="")
+                category = str(input().strip())
+                cprint("Please enter the description:", end="")
+                description = str(input().strip())
+            except ValueError:
+                cprint("Please enter a valid amount.")
+
         self.exp_id += 1
         new_expense = ExpenseRegistry.Expense(self.exp_id,amount, category, description)
         self.expenses[new_expense.get_id()] = new_expense
@@ -77,31 +81,52 @@ class ExpenseRegistry:
     def get_total(self):
         return self.total_val
 
-    def delete_expense(self):
-        id = None
+    def find_expense(self):
+        pass
+    def delete_expense(self,):
+        cprint("Please enter the ID of the expense you would like to delete:", end='')
+        delete_id = int(input().strip())
+        try:
+            del self.expenses[delete_id]
+            return True
 
-        while (not id):
-            id = input("Please enter the amount: ")
-            try:
-                id = int(id)
-            except ValueError:
-                print("Invalid input. Please try again.")
-                id = None
+        except KeyError:
+            return False
 
-        for category, expenses in self.expenses.items():
-            print(category)
-            # for expense in expenses:
-            #     if expense.get_id() == id:
-            #         self.total_val -= expense.get_amount()
-            #         expenses.remove(expense)
-            #         print(f"Expense {id} has been deleted successfully!")
-            #         return
 
     def view_category(self):
-        pass
+        cprint("Please enter the category you would like to see:", end='')
+        category = input().strip()
+        for exp_id, expense in self.expenses.items():
+            if expense.get_category() == category:
+                lprint(expense)
+    def search(self):
+        lprint("\tid\n")
+        lprint("\tcategory\n")
+        lprint("\tdescription\n")
+        cprint("Please enter how you would like to view your expense(s):", end='')
+        search_type = input().strip()
+        if search_type == "id":
+            print("Please enter the id of the expense you would like to view:", end='')
+        elif search_type == "category":
+            pass
+        elif search_type == "description":
+            pass
+        else:
+            cprint("Please enter a valid search type.")
 
-    def find_description(self, description):
-        pass
 
-    def find_expense(self, id):
-        pass
+    # def find_description(self, description):
+        # descriptions = {exp_id: expense.get_description() for exp_id, expense in self.expenses.items()}
+        #
+        # # Use fuzzywuzzy to find the best matches
+        # best_matches = process.extract(description, descriptions, limit=10)  # Adjust limit as needed
+        #
+        # # Output the best matches
+        # for match in best_matches:
+        #     exp_id, score = match[0], match[1]
+        #     if score > 80:  # Adjust score threshold as needed
+        #         expense = self.expenses[exp_id]
+        #         print(expense)  # Or do something else with the matching expenses
+
+

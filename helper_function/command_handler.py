@@ -4,7 +4,7 @@ from time import sleep
 import utilities.TUI as TUI
 
 
-def cprint(*args, sep=' ', end='\n', flush=False, speed=0):
+def cprint(*args, sep=' ', end='\n', flush=False, speed=20):
     for arg in args:
         for char in str(arg):
             print(char, end='', flush=True)
@@ -38,13 +38,24 @@ def handle_command(expense_registry, user_input):
             TUI.create_view(expense_registry)
     elif user_input == "delete":
         clear_terminal()
-        expense_registry.delete_expense()
+        if expense_registry.isempty():
+            cprint("Sorry, there are no expenses that have been logged yet.")
+        elif expense_registry.delete_expense():
+            lprint(f"Expense has successfully been deleted.")
+        else:
+            lprint("Sorry, there is no expense with that ID.")
+
     elif user_input == "summarize":
         pass
     elif user_input == "search":
-        pass
-    elif user_input == "exit":
-        pass
+        clear_terminal()
+        if expense_registry.isempty():
+            cprint("Sorry, there are no expenses that have been logged yet.")
+        else:
+            expense_registry.search()
+
+
+
     else:
         cprint("Invalid command. Please try again.")
 
@@ -60,15 +71,7 @@ def welcome_prompt(username):
         cprint(f"""Welcome {username}, to your personal expense tracker!\n""")
 
 def command_list():
-    """
-    Please choose one of the following commands:
-        log - to log a new expense
-        view - to view all expenses
-        delete - to delete an expense
-        summarize - to summarize your expenses
-        search - to search for a specific expense
-        exit - to exit the program
-    """
+
     lprint(
         'Please choose one of the following commands:\n',
         '\tlog - to log a new expense\n',
@@ -76,5 +79,5 @@ def command_list():
         '\tdelete - to delete an expense\n',
         '\tsummarize - to summarize your expenses\n',
         '\tsearch - to search for a specific expense\n',
-        '\texit - to exit the program\n'
+        '\texit/quit - to exit the program\n'
     )
