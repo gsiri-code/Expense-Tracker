@@ -1,12 +1,37 @@
+from helper_function.command_handler import cprint, lprint
+from utilities.Table import Table
+from utilities import TUI
+from fuzzywuzzy import fuzz
 import datetime
 import csv
-from helper_function.command_handler import cprint, lprint
-from utilities import TUI
-from utilities.Table import Table
-from fuzzywuzzy import fuzz
 
 
 class ExpenseRegistry:
+    """
+    This class is used to store and manage expenses.
+
+    Attributes:
+        exp_id (int): The id of the expense.
+        expenses (dict): A dictionary of expenses.
+        total_val (float): The total value of all expenses.
+        amount_of_exp (int): The amount of expenses.
+        total_categories (int): The amount of categories.
+
+    Methods:
+        isempty(): Checks if the expense registry is empty.
+        load(file): Loads expenses from a file.
+        get_total(): Returns the total value of all expenses.
+        add_expense(): Adds an expense to the registry.
+        __repr__(): Returns a string representation of the expense registry.
+        delete_expense(): Deletes an expense from the registry.
+        search(): Searches for an expense.
+        search_by_id(): Searches for an expense by id.
+        view_category(threshold): Views expenses by category.
+        find_description(threshold): Finds expenses by description.
+        summarize(): Summarizes the expense registry.
+        save(file): Saves the expense registry to a file.
+    """
+
     class Expense:
 
         def __init__(self, exp_id, amount, category, description):
@@ -45,6 +70,7 @@ class ExpenseRegistry:
 
     def isempty(self):
         return len(self.expenses) == 0
+
     def load(self, file):
         try:
             with open(file, 'r') as f:
@@ -75,7 +101,6 @@ class ExpenseRegistry:
 
     def get_total(self):
         return self.total_val
-
 
     def add_expense(self):
         amount = category = description = None

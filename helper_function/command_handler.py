@@ -3,6 +3,15 @@ import platform
 from time import sleep
 import utilities.TUI as TUI
 
+"""
+This file includes the following functions:
+    cprint - prints each character of a string with a delay
+    lprint - prints each character of a string without a delay
+    clear_terminal - clears the terminal
+    command_list - prints the list of commands
+    handle_command - handles the user input
+"""
+
 
 def cprint(*args, sep=' ', end='\n', flush=False, speed=20):
     for arg in args:
@@ -12,11 +21,13 @@ def cprint(*args, sep=' ', end='\n', flush=False, speed=20):
         print(sep, end='', flush=True)
     print(end=end, flush=flush)
 
+
 def lprint(*args, sep=' ', end='\n', flush=False, speed=150):
     for arg in args:
         print(arg, end='', flush=True)
         sleep(speed / 1000)
     print(end=end, flush=flush)
+
 
 def clear_terminal():
     system = platform.system()
@@ -26,10 +37,7 @@ def clear_terminal():
         os.system('clear')
 
 
-
-
 def command_list():
-
     lprint(
         'Please choose one of the following commands:\n',
         '\t(l)og - to log a new expense\n',
@@ -39,6 +47,8 @@ def command_list():
         '\t(f)ind - to search for a specific expense\n',
         '\t(q)uit - to end the program\n'
     )
+
+
 def handle_command(expense_registry, user_input):
     if user_input == 'log' or user_input == 'l':
         clear_terminal()
@@ -75,7 +85,3 @@ def handle_command(expense_registry, user_input):
         exit()
     else:
         cprint("Invalid command. Please try again.")
-
-
-
-
