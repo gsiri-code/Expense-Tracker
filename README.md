@@ -10,7 +10,7 @@ Before running the application, ensure you have the following libraries installe
 - `datetime`: For managing and formatting dates.
 - `csv`: For reading and writing expenses to a CSV file.
 - `fuzzywuzzy`: For fuzzy searching through descriptions and categories.
-- 
+  
 You can install `fuzzywuzzy` using pip:
 
 ```bash
@@ -21,9 +21,13 @@ Note: Ensure you have the other internal modules and their dependencies installe
 
 ## Setup
 
-1. Clone or download the Expense Tracker repository to your local machine.
-2. Navigate to the root directory of the project using your terminal or command prompt.
-3. Install the required libraries (if you haven't done so already).
+1. Clone or download the Expense Tracker repository to your local machine:
+
+```bash
+git clone https://github.com/gsiri-code/Expense-Tracker
+```
+3. Navigate to the root directory of the project using your terminal or command prompt.
+4. Install the required libraries (if you haven't done so already).
 
 ## How to Use
 
