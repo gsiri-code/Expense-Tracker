@@ -53,20 +53,21 @@ class ExpenseRegistry:
                 next(reader)
                 # Read each expense
                 for row in reader:
-                    self.exp_id = int(row[0])
-                    self.total_val += float(row[1])
-                    self.amount_of_exp += 1
-                    old_category = False
+                    if row:
+                        self.exp_id = int(row[0])
+                        self.total_val += float(row[1])
+                        self.amount_of_exp += 1
+                        old_category = False
 
-                    for expense in self.expenses.values():
-                        if expense.get_category() == row[2]:
-                            old_category = True
-                            break
-                    if not old_category:
-                        self.total_categories += 1
+                        for expense in self.expenses.values():
+                            if expense.get_category() == row[2]:
+                                old_category = True
+                                break
+                        if not old_category:
+                            self.total_categories += 1
 
-                    new_expense = ExpenseRegistry.Expense(self.exp_id, float(row[1]), row[2], row[3])
-                    self.expenses[self.exp_id] = new_expense
+                        new_expense = ExpenseRegistry.Expense(self.exp_id, float(row[1]), row[2], row[3])
+                        self.expenses[self.exp_id] = new_expense
             return True
         except IOError:
             cprint("Error: Unable to load from file.")
@@ -123,7 +124,7 @@ class ExpenseRegistry:
         if not old_category:
             self.total_categories += 1
 
-        new_expense = ExpenseRegistry.Expense(self.exp_id, amount, category.capitalize(), description)
+        new_expense = ExpenseRegistry.Expense(self.exp_id, amount, category, description)
         self.expenses[self.exp_id] = new_expense
 
         lprint(new_expense)
@@ -180,24 +181,28 @@ class ExpenseRegistry:
                 continue
         return None
 
-    def view_category(self):
+    def view_category(self, threshold=80):
         cprint("Please enter the category you would like to view:", end='')
-        category = None
-        while not category:
-            category = input().strip()
-        while True:
-            try:
-                table = Table('ID', 'Amount', 'Category', 'Description', 'Date')
-                for exp_id, expense in self.expenses.items():
-                    if expense.get_category() == category:
-                        table.add_row(
-                            [exp_id, expense.get_amount(), expense.get_category(), expense.get_description(),
-                             expense.date_time])
-                lprint(table)
-                break
-            except KeyError:
-                cprint("Please enter a valid category.")
-                continue
+        category_query = None
+        while not category_query:
+            category_query = input().strip()
+
+        table = Table('ID', 'Amount', 'Category', 'Description', 'Date')
+        matching_expenses = []
+
+        for exp_id, expense in self.expenses.items():
+            ratio = fuzz.ratio(expense.get_category().lower(), category_query.lower())
+            if ratio >= threshold:
+                matching_expenses.append(expense)
+
+        if matching_expenses:
+            for expense in matching_expenses:
+                table.add_row(
+                    [expense.get_id(), expense.get_amount(), expense.get_category(),
+                     expense.get_description(), expense.date_time])
+            lprint(table)
+        else:
+            cprint(f"No expenses found for category similar to '{category_query}'")
 
     def find_description(self, threshold=80):
         query = None

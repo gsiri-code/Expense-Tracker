@@ -26,16 +26,7 @@ def clear_terminal():
         os.system('clear')
 
 
-def welcome_prompt(username):
-    if not username:
-        cprint("Welcome to your personal expense tracker!")
 
-        while not username:
-            cprint("Please enter your name: ", end='')
-            username = input().strip()
-        clear_terminal()
-        cprint(f"""Welcome {username.capitalize()}, to your personal expense tracker!\n""")
-        return username
 
 def command_list():
 
@@ -48,7 +39,7 @@ def command_list():
         '\t(f)ind - to search for a specific expense\n',
         '\t(q)uit - to end the program\n'
     )
-def handle_command(expense_registry, user_input,username):
+def handle_command(expense_registry, user_input):
     if user_input == 'log' or user_input == 'l':
         clear_terminal()
         expense_registry.add_expense()
@@ -80,7 +71,7 @@ def handle_command(expense_registry, user_input,username):
         clear_terminal()
         expense_registry.save("expenses.csv")
 
-        cprint(f"Goodbye {username.capitalize()}, all of your expenses have been saved in expenses.csv!")
+        cprint(f"Have a great day! All of your expenses have been saved in expenses.csv!")
         exit()
     else:
         cprint("Invalid command. Please try again.")
