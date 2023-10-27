@@ -8,6 +8,7 @@ clear_terminal()
 
 username = welcome_prompt(username)
 
+
 while True:
     command_list()
     cprint("Please input one of the key words above:", end='')

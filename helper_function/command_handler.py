@@ -41,24 +41,24 @@ def command_list():
 
     lprint(
         'Please choose one of the following commands:\n',
-        '\tlog - to log a new expense\n',
-        '\tview - to view all expenses\n',
-        '\tdelete - to delete an expense\n',
-        '\tsummarize - to summarize your expenses\n',
-        '\tsearch - to search for a specific expense\n',
-        '\texit/quit - to exit the program\n'
+        '\t(l)og - to log a new expense\n',
+        '\t(v)iew - to view all expenses\n',
+        '\t(d)elete - to delete an expense\n',
+        '\t(s)ummarize - to summarize your expenses\n',
+        '\t(f)ind - to search for a specific expense\n',
+        '\t(q)uit - to end the program\n'
     )
 def handle_command(expense_registry, user_input,username):
-    if user_input == 'log':
+    if user_input == 'log' or user_input == 'l':
         clear_terminal()
         expense_registry.add_expense()
-    elif user_input == "view":
+    elif user_input == "view" or user_input == "v":
         clear_terminal()
         if expense_registry.isempty():
             cprint("Sorry, there are no expenses that have been logged yet.")
         else:
             TUI.create_view(expense_registry)
-    elif user_input == "delete":
+    elif user_input == "delete" or user_input == "d":
         clear_terminal()
         if expense_registry.isempty():
             cprint("Sorry, there are no expenses that have been logged yet.")
@@ -67,16 +67,20 @@ def handle_command(expense_registry, user_input,username):
         else:
             lprint("Sorry, there is no expense with that ID.")
 
-    elif user_input == "summarize":
+    elif user_input == "summarize" or user_input == "s":
+        clear_terminal()
         expense_registry.summarize()
-    elif user_input == "search":
+    elif user_input == "find" or user_input == "f":
         clear_terminal()
         if expense_registry.isempty():
             cprint("Sorry, there are no expenses that have been logged yet.")
         else:
             expense_registry.search()
-    elif (user_input == "exit") or (user_input == "quit"):
-        cprint(f"Goodbye {username.capitalize()}!")
+    elif user_input == "quit" or user_input == "q":
+        clear_terminal()
+        expense_registry.save("expenses.csv")
+
+        cprint(f"Goodbye {username.capitalize()}, all of your expenses have been saved in expenses.csv!")
         exit()
     else:
         cprint("Invalid command. Please try again.")
